@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Employees.Models.Employee>
+
+@{
+    ViewBag.Title = "GetAllEmployees";
+}
+
+<h2>All Employees</h2>
+@using (Html.BeginForm("GetAllEmployees", "Employee", FormMethod.Post))
+{
+    <p>
+        @Html.ActionLink("Create New Employee", "Create")
+    </p>
+    <p>
+        @Html.TextBox("searchText")
+        <input type="submit" value="Search" />
+    </p>
+    <table class="table" border="1" width="100%">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Email Id
+            </th>
+            <th>
+                Date Of Birth
+            </th>
+            <th>
+                Experience Level
+            </th>
+            <th>
+                Gender
+            </th>
+            <th>
+                Address
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            string colour = string.Empty;
+            if (item.ExperienceLevel == "Senior")
+            {
+                colour = "green";
+            }
+            else
+            {
+                colour = "red";
+            }
+            <tr>
+                <td>
+                    <span style="color: @colour;">
+                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                    </span>
+                </td>
+                <td>
+                    <span style="color: @colour;">
+                        @Html.DisplayFor(modelItem => item.EmailId)
+                    </span>
+                </td>
+                <td>
+                    <span style="color: @colour;">
+                        @Html.ValueFor(modelItem => item.DateOfBirth, "{0:dd/MM/yyyy}")
+                    </span>
+                </td>
+                <td>
+                    <span style="color: @colour;">
+                        @Html.DisplayFor(modelItem => item.ExperienceLevel)
+                    </span>
+                </td>
+                <td>
+                    <span style="color: @colour;">
+                        @Html.DisplayFor(modelItem => item.Gender)
+                    </span>
+                </td>
+                <td>
+                    <span style="color: @colour;">
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </span>
+                </td>
+                <td>
+                    <span style="color: @colour;">
+                        @Html.ActionLink("Delete", "Delete", new { id = item.EmployeeId })
+                    </span>
+                </td>
+            </tr>
+        }
+
+    </table>
+}
