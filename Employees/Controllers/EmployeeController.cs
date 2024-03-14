@@ -10,11 +10,18 @@ namespace Employees.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly EmployeeDbEntities employeeDbContext = new EmployeeDbEntities();
+        private readonly EmployeeDbContext employeeDbContext = new EmployeeDbContext();
         public ActionResult GetAllEmployees()
         {
-            var employeeLst = employeeDbContext.Employees.ToList();
-            return View(employeeLst);
+            try
+            {
+                var employeeLst = employeeDbContext.Employees.ToList();
+                return View(employeeLst);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public ActionResult Create()
@@ -25,51 +32,80 @@ namespace Employees.Controllers
         [HttpPost]
         public ActionResult Create(FormCollection formCollection)
         {
-            Employee employee = new Employee
+            try
             {
-                EmployeeName = formCollection["EmployeeName"],
-                EmailId = formCollection["EmailId"],
-                DateOfBirth = Convert.ToDateTime(formCollection["DateOfBirth"]),
-                ExperienceLevel = formCollection["ExperienceLevel"],
-                Gender = formCollection["Gender"],
-                Address = formCollection["Address"]
-            };
+                Employee employee = new Employee
+                {
+                    EmployeeName = formCollection["EmployeeName"],
+                    EmailId = formCollection["EmailId"],
+                    DateOfBirth = Convert.ToDateTime(formCollection["DateOfBirth"]),
+                    ExperienceLevel = formCollection["ExperienceLevel"],
+                    Gender = formCollection["Gender"],
+                    Address = formCollection["Address"]
+                };
 
-            employeeDbContext.Employees.Add(employee);
-            employeeDbContext.SaveChanges();
-            return RedirectToAction("GetAllEmployees");
+                employeeDbContext.Employees.Add(employee);
+                employeeDbContext.SaveChanges();
+                return RedirectToAction("GetAllEmployees");
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Employee Id is required");
+            try
+            {
+                if (id == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Employee Id is required");
 
-            Employee employee = employeeDbContext.Employees.Find(id);
-            if (employee == null)
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound, "Employee not found");
-            return View(employee);
+                Employee employee = employeeDbContext.Employees.Find(id);
+                if (employee == null)
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound, "Employee not found");
+                return View(employee);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]
         [ActionName("Delete")]
         public ActionResult DeleteEmployee(int? id)
         {
-            Employee employee = employeeDbContext.Employees.Find(id);
-            employeeDbContext.Employees.Remove(employee);
-            employeeDbContext.SaveChanges();
-            return RedirectToAction("GetAllEmployees");
+            try
+            {
+                Employee employee = employeeDbContext.Employees.Find(id);
+                employeeDbContext.Employees.Remove(employee);
+                employeeDbContext.SaveChanges();
+                return RedirectToAction("GetAllEmployees");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]
         public ActionResult GetAllEmployees(string searchText)
         {
-            var employeeLst = employeeDbContext.Employees.ToList();
-            if (!string.IsNullOrEmpty(searchText))
+            try
             {
-                employeeLst = employeeLst.Where(emp => emp.EmployeeName.Contains(searchText) || emp.EmailId.Contains(searchText) || emp.ExperienceLevel.Contains(searchText) || emp.Address.Contains(searchText)).ToList();
+                var employeeLst = employeeDbContext.Employees.ToList();
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    employeeLst = employeeLst.Where(emp => emp.EmployeeName.Contains(searchText) || emp.EmailId.Contains(searchText) || emp.ExperienceLevel.Contains(searchText) || emp.Address.Contains(searchText)).ToList();
+                }
+                return View(employeeLst);
             }
-            return View(employeeLst);
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

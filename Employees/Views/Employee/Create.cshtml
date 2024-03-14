@@ -12,7 +12,7 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Employee", FormMethod.Post, new { autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
 
@@ -88,7 +88,7 @@
 <script type="text/javascript">
     $(function () {  
         $('.datepicker').datepicker({
-            format: 'dd-MM-yyyy'
+            format: 'dd-mm-yyyy'
         });
     });
 </script>
